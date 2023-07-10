@@ -148,14 +148,33 @@ function Blog() {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
             navigate('/login');
-          } catch (error) {
+        } catch (error) {
             console.error(error);
-          }
+        }
+    };
+
+    const handleViewPost = async (postId) => {
+        const accessToken = localStorage.getItem('access_token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
         };
 
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/blog/blogposts/${postId}/`, config);
+            setSelectedPost(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const closePostDetails = () => {
+        setSelectedPost(null);
+    };
     return (
         <div>
-            <h1 className="blog-title">Blog Posts</h1>
+            <h1 className="blog-title">BlogPosts</h1>
             <div className="logout-button-container">
                 <button className="logout-button" onClick={handleLogout}>Logout</button>
             </div>
@@ -170,12 +189,17 @@ function Blog() {
                         <th>Content</th>
                         <th>Created At</th>
                         <th>Actions</th>
-                    </tr></thead>
+                    </tr>
+                </thead>
                 <tbody>
                     {blogPosts.map(post => (
                         <tr key={post.id}>
                             <td>{post.id}</td>
-                            <td>{post.title}</td>
+                            <td>
+                                <a className="view-link" href="#" onClick={() => handleViewPost(post.id)}>
+                                    {post.title}
+                                </a>
+                            </td>
                             <td>{post.content}</td>
                             <td>{post.created_at}</td>
                             <td>
@@ -193,18 +217,11 @@ function Blog() {
             {selectedPost && (
                 <div className="modal">
                     <div className="modal-content">
-                        <h2>Update Post</h2>
-                        <div>
-                            <label>Title:</label>
-                            <input type="text" value={updateTitle} onChange={e => setUpdateTitle(e.target.value)} />
-                        </div>
-                        <div>
-                            <label>Content:</label>
-                            <textarea value={updateContent} onChange={e => setUpdateContent(e.target.value)}></textarea>
-                        </div>
+                        <h2>{selectedPost.title}</h2>
+                        <p>{selectedPost.content}</p>
+                        {/* <p>Author: {selectedPost.author}</p> */}
                         <div className="modal-actions">
-                            <button onClick={handleUpdate}>Update</button>
-                            <button onClick={closeUpdateDialog}>Cancel</button>
+                            <button onClick={closePostDetails}>Close</button>
                         </div>
                     </div>
                 </div>
