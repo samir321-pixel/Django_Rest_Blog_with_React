@@ -1,0 +1,30 @@
+.blog-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .blog-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .blog-table th,
+  .blog-table td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .blog-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .blog-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .blog-table tbody tr:hover {
+    background-color: #ddd;
+  }
+  
