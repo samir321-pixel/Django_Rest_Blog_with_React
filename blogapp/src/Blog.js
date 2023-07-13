@@ -9,6 +9,7 @@ import './Blog.css'; // Import the CSS file for styling
 function Blog() {
     const [blogPosts, setBlogPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
     const [updateTitle, setUpdateTitle] = useState('');
     const [updateContent, setUpdateContent] = useState('');
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -181,6 +182,17 @@ function Blog() {
             <div className="create-button-container">
                 <button className="create-button" onClick={openCreateForm}>Create Post</button>
             </div>
+            {showPopup && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>{selectedPost.title}</h2>
+                        {/* <p>{selectedPost.content}</p> */}
+                        <div className="modal-actions">
+                            <button onClick={() => setShowPopup(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <table className="blog-table">
                 <thead>
                     <tr>
@@ -196,9 +208,7 @@ function Blog() {
                         <tr key={post.id}>
                             <td>{post.id}</td>
                             <td>
-                                <a className="view-link" href="#" onClick={() => handleViewPost(post.id)}>
-                                    {post.title}
-                                </a>
+                                {post.title}
                             </td>
                             <td>{post.content}</td>
                             <td>{post.created_at}</td>
@@ -217,15 +227,23 @@ function Blog() {
             {selectedPost && (
                 <div className="modal">
                     <div className="modal-content">
-                        <h2>{selectedPost.title}</h2>
-                        <p>{selectedPost.content}</p>
-                        {/* <p>Author: {selectedPost.author}</p> */}
+                        <h2>Update Post</h2>
+                        <div>
+                            <label>Title:</label>
+                            <input type="text" value={updateTitle} onChange={e => setUpdateTitle(e.target.value)} />
+                        </div>
+                        <div>
+                            <label>Content:</label>
+                            <textarea value={updateContent} onChange={e => setUpdateContent(e.target.value)}></textarea>
+                        </div>
                         <div className="modal-actions">
-                            <button onClick={closePostDetails}>Close</button>
+                            <button onClick={handleUpdate}>Save</button>
+                            <button onClick={closeUpdateDialog}>Cancel</button>
                         </div>
                     </div>
                 </div>
             )}
+
             {showCreateForm && (
                 <div className="modal">
                     <div className="modal-content">
